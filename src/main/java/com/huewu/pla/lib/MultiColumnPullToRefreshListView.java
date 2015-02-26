@@ -746,6 +746,17 @@ public class MultiColumnPullToRefreshListView extends MultiColumnListView {
         }
     };
 
+    @Override
+    protected void listScrollIdleTest() {
+        // ZHUJJ Auto-generated method stub
+        super.listScrollIdleTest();
+        Log.e("debug", "subclass state: " + state.toString());
+        if (state == State.PULL_TO_REFRESH ||
+                state == State.RELEASE_TO_REFRESH) {
+            bounceBackHeader();
+        }
+    }
+
     // private class PTROnItemClickListener implements OnItemClickListener {
     //
     // @Override
@@ -780,4 +791,5 @@ public class MultiColumnPullToRefreshListView extends MultiColumnListView {
     // return false;
     // }
     // }
+
 }

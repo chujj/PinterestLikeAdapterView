@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.View;
 
@@ -444,12 +445,23 @@ public class MultiColumnListView extends PLA_ListView {
         void onLoadMore();
     }
 
+    protected void listScrollIdleTest() {
+        
+    }
+    
+    private int mSaveState = OnScrollListener.SCROLL_STATE_IDLE;
+    public boolean isStateIDLE() {
+        return mSaveState == OnScrollListener.SCROLL_STATE_IDLE;
+    }
+    
     public OnScrollListener scroller = new OnScrollListener() {
         private int visibleLastIndex = 0;
         private static final int OFFSET = 2;
 
         @Override
         public void onScrollStateChanged(PLA_AbsListView view, int scrollState) {
+            mSaveState = scrollState;
+                                     
             int lastIndex = getAdapter().getCount() - OFFSET;
             if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
                     && visibleLastIndex == lastIndex && loadingMoreComplete) {
@@ -457,6 +469,11 @@ public class MultiColumnListView extends PLA_ListView {
                 loadMoreListener.onLoadMore();
                 loadingMoreComplete = false;
 
+            }
+            
+            if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+                Log.e("debug", "scrollState == IDLE");
+                listScrollIdleTest();
             }
         }
 
